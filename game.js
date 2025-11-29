@@ -8,7 +8,7 @@ const gameState = {
     slot1Color: null,
     slot2Color: null,
     resultColor: null,
-    crabColor: [255, 107, 107], // Default coral color
+    crabColor: [245, 245, 245], // Default white color
     selectedSlot: 1,
     discoveredColors: new Set(['255,0,0', '255,255,0', '0,0,255']) // Primary colors
 };

@@ -44,14 +44,13 @@ function rgbToString(colorArray) {
 }
 
 /**
- * Mix two colors together using additive color mixing
+ * Mix two colors together using RGB averaging
+ * This produces a subtractive-like mixing effect similar to paint mixing
  * @param {number[]} color1 - First color [r, g, b]
  * @param {number[]} color2 - Second color [r, g, b]
  * @returns {number[]} Mixed color [r, g, b]
  */
 function mixColors(color1, color2) {
-    // Using a simple average for a subtractive-like mixing effect
-    // This gives more natural paint-mixing results
     return [
         Math.round((color1[0] + color2[0]) / 2),
         Math.round((color1[1] + color2[1]) / 2),

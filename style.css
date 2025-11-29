@@ -454,70 +454,105 @@ h2 {
     }
 }
 
-/* Crab Styling */
+/* Crab Styling - Cartoon Style */
 .crab {
     position: relative;
-    width: 180px;
-    height: 140px;
+    width: 160px;
+    height: 130px;
     transition: all 0.5s ease;
     margin-top: 50px;
 }
 
 .crab-body {
     position: absolute;
-    width: 100px;
-    height: 65px;
+    width: 90px;
+    height: 60px;
     background: #ff6b6b;
-    border-radius: 50% 50% 45% 45%;
+    border-radius: 50%;
     left: 50%;
-    top: 25px;
+    top: 40px;
     transform: translateX(-50%);
-    box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2);
+    box-shadow: 
+        inset -8px -8px 15px rgba(0,0,0,0.15),
+        inset 8px 8px 15px rgba(255,255,255,0.2);
     transition: background-color 0.5s ease;
     z-index: 2;
 }
 
+/* Eye stalks */
 .eye {
     position: absolute;
-    width: 12px;
-    height: 18px;
+    width: 14px;
+    height: 22px;
     background: #fff;
     border-radius: 50%;
-    top: -8px;
+    top: -18px;
     z-index: 3;
+    border: 2px solid rgba(0,0,0,0.1);
 }
 
-.eye::after {
+/* Eye stalk (the stick part) */
+.eye::before {
     content: '';
     position: absolute;
     width: 6px;
-    height: 6px;
+    height: 12px;
+    background: inherit;
+    border-radius: 3px;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: -1;
+}
+
+/* Pupil */
+.eye::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
     background: #333;
     border-radius: 50%;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
 .left-eye {
-    left: 25px;
+    left: 28px;
+    transform: rotate(-10deg);
 }
 
 .right-eye {
-    right: 25px;
+    right: 28px;
+    transform: rotate(10deg);
 }
 
+/* Happy smile mouth */
 .mouth {
     position: absolute;
-    width: 18px;
-    height: 8px;
+    width: 30px;
+    height: 15px;
     background: #333;
-    border-radius: 0 0 18px 18px;
-    bottom: 12px;
+    border-radius: 0 0 30px 30px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
     transition: all 0.1s;
     z-index: 3;
+}
+
+/* Smile highlight */
+.mouth::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 8px;
+    background: #c0392b;
+    border-radius: 0 0 20px 20px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .mouth.eating {
@@ -526,77 +561,79 @@ h2 {
 
 @keyframes mouthChomp {
     0%, 100% { 
-        height: 8px;
-        border-radius: 0 0 18px 18px;
+        height: 15px;
+        border-radius: 0 0 30px 30px;
     }
     50% { 
-        height: 16px;
+        height: 20px;
         border-radius: 50%;
     }
 }
 
-/* Crab Claws - More realistic pincer style */
+/* Cartoon Crab Claws - Big friendly pincers */
 .claw {
     position: absolute;
-    width: 40px;
-    height: 30px;
+    width: 35px;
+    height: 28px;
     background: #ff6b6b;
-    border-radius: 50% 50% 30% 30%;
-    top: 35px;
-    box-shadow: inset 0 -5px 10px rgba(0,0,0,0.2);
+    border-radius: 50% 50% 45% 45%;
+    top: 45px;
+    box-shadow: 
+        inset -3px -3px 8px rgba(0,0,0,0.15),
+        inset 3px 3px 8px rgba(255,255,255,0.15);
     transition: background-color 0.5s ease, transform 0.2s;
-    z-index: 1;
+    z-index: 3;
 }
 
 /* Claw arm connecting to body */
 .claw::before {
     content: '';
     position: absolute;
-    width: 20px;
-    height: 12px;
+    width: 15px;
+    height: 18px;
     background: inherit;
-    border-radius: 6px;
-    top: 10px;
+    border-radius: 8px;
+    top: 5px;
 }
 
-/* Pincer part of claw */
+/* Upper pincer (the moving part) */
 .claw::after {
     content: '';
     position: absolute;
-    width: 15px;
-    height: 12px;
+    width: 18px;
+    height: 14px;
     background: inherit;
-    border-radius: 50% 50% 0 0;
-    top: -5px;
-    box-shadow: inset 0 3px 5px rgba(0,0,0,0.15);
+    border-radius: 50% 50% 30% 30%;
+    top: -8px;
+    box-shadow: inset 0 -2px 4px rgba(0,0,0,0.1);
 }
 
 .left-claw {
-    left: 5px;
-    transform: rotate(-15deg);
+    left: 8px;
+    transform: rotate(-25deg);
 }
 
 .left-claw::before {
-    right: -5px;
+    right: -8px;
 }
 
 .left-claw::after {
-    left: 8px;
-    transform: rotate(30deg);
+    left: 3px;
+    transform: rotate(25deg);
 }
 
 .right-claw {
-    right: 5px;
-    transform: rotate(15deg);
+    right: 8px;
+    transform: rotate(25deg);
 }
 
 .right-claw::before {
-    left: -5px;
+    left: -8px;
 }
 
 .right-claw::after {
-    right: 8px;
-    transform: rotate(-30deg);
+    right: 3px;
+    transform: rotate(-25deg);
 }
 
 /* Claw grab animation when eating */
@@ -609,65 +646,78 @@ h2 {
 }
 
 @keyframes leftClawGrab {
-    0%, 100% { transform: rotate(-15deg); }
-    50% { transform: rotate(0deg) translateX(5px); }
+    0%, 100% { transform: rotate(-25deg); }
+    50% { transform: rotate(-10deg) translateX(8px); }
 }
 
 @keyframes rightClawGrab {
-    0%, 100% { transform: rotate(15deg); }
-    50% { transform: rotate(0deg) translateX(-5px); }
+    0%, 100% { transform: rotate(25deg); }
+    50% { transform: rotate(10deg) translateX(-8px); }
 }
 
-/* Legs - Connected to body */
+/* Legs - Cartoon style curved legs */
 .legs {
     position: absolute;
     width: 100%;
     height: 100%;
-    z-index: 0;
+    z-index: 1;
 }
 
 .leg {
     position: absolute;
-    width: 10px;
-    height: 25px;
+    width: 8px;
+    height: 20px;
     background: #ff6b6b;
-    border-radius: 5px;
+    border-radius: 4px 4px 6px 6px;
     transition: background-color 0.5s ease;
     transform-origin: top center;
+    box-shadow: inset -1px -2px 3px rgba(0,0,0,0.1);
 }
 
-/* Left side legs - attached to body sides */
+/* Add cute foot to each leg */
+.leg::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 6px;
+    background: inherit;
+    border-radius: 0 0 5px 5px;
+    bottom: -3px;
+    left: -1px;
+}
+
+/* Left side legs - curved outward */
 .leg1 { 
-    left: 35px; 
-    top: 70px; 
-    transform: rotate(-40deg); 
+    left: 30px; 
+    top: 80px; 
+    transform: rotate(-50deg); 
 }
 .leg2 { 
-    left: 45px; 
-    top: 78px; 
-    transform: rotate(-20deg); 
+    left: 42px; 
+    top: 88px; 
+    transform: rotate(-25deg); 
 }
 .leg3 { 
     left: 55px; 
-    top: 82px; 
+    top: 92px; 
     transform: rotate(-5deg); 
 }
 
-/* Right side legs - attached to body sides */
+/* Right side legs - curved outward */
 .leg4 { 
     right: 55px; 
-    top: 82px; 
+    top: 92px; 
     transform: rotate(5deg); 
 }
 .leg5 { 
-    right: 45px; 
-    top: 78px; 
-    transform: rotate(20deg); 
+    right: 42px; 
+    top: 88px; 
+    transform: rotate(25deg); 
 }
 .leg6 { 
-    right: 35px; 
-    top: 70px; 
-    transform: rotate(40deg); 
+    right: 30px; 
+    top: 80px; 
+    transform: rotate(50deg); 
 }
 
 .feed-btn {

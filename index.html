@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pigment - Color Mixing Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>🎨 Pigment Factory 🦀</h1>
+        <p class="instructions">Mix colors in the factory, then feed the pigment to the crab!</p>
+        
+        <!-- Color Palette -->
+        <section class="color-palette">
+            <h2>Color Palette</h2>
+            <div class="colors">
+                <button class="color-btn" data-color="255,0,0" style="background-color: rgb(255,0,0);" title="Red"></button>
+                <button class="color-btn" data-color="0,255,0" style="background-color: rgb(0,255,0);" title="Green"></button>
+                <button class="color-btn" data-color="0,0,255" style="background-color: rgb(0,0,255);" title="Blue"></button>
+                <button class="color-btn" data-color="255,255,0" style="background-color: rgb(255,255,0);" title="Yellow"></button>
+                <button class="color-btn" data-color="255,0,255" style="background-color: rgb(255,0,255);" title="Magenta"></button>
+                <button class="color-btn" data-color="0,255,255" style="background-color: rgb(0,255,255);" title="Cyan"></button>
+                <button class="color-btn" data-color="255,165,0" style="background-color: rgb(255,165,0);" title="Orange"></button>
+                <button class="color-btn" data-color="128,0,128" style="background-color: rgb(128,0,128);" title="Purple"></button>
+            </div>
+        </section>
+        
+        <!-- Factory Mixing Area -->
+        <section class="factory">
+            <h2>🏭 Mixing Factory</h2>
+            <div class="mixing-area">
+                <div class="ingredient-slots">
+                    <div class="slot" id="slot1">
+                        <span class="slot-label">Slot 1</span>
+                    </div>
+                    <span class="plus">+</span>
+                    <div class="slot" id="slot2">
+                        <span class="slot-label">Slot 2</span>
+                    </div>
+                    <span class="equals">=</span>
+                    <div class="result-slot" id="result">
+                        <span class="slot-label">Result</span>
+                    </div>
+                </div>
+                <div class="factory-controls">
+                    <button id="mix-btn" class="action-btn">Mix Colors!</button>
+                    <button id="clear-btn" class="action-btn secondary">Clear Factory</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Crab Display -->
+        <section class="crab-area">
+            <h2>🦀 Feed the Crab!</h2>
+            <div class="crab-container">
+                <div class="crab" id="crab">
+                    <div class="crab-body">
+                        <div class="eye left-eye"></div>
+                        <div class="eye right-eye"></div>
+                        <div class="mouth"></div>
+                    </div>
+                    <div class="claw left-claw"></div>
+                    <div class="claw right-claw"></div>
+                    <div class="legs">
+                        <div class="leg leg1"></div>
+                        <div class="leg leg2"></div>
+                        <div class="leg leg3"></div>
+                        <div class="leg leg4"></div>
+                        <div class="leg leg5"></div>
+                        <div class="leg leg6"></div>
+                    </div>
+                </div>
+            </div>
+            <button id="feed-btn" class="action-btn feed-btn" disabled>Feed Crab!</button>
+            <p class="crab-status" id="crab-status">The crab is hungry! Mix some colors and feed it!</p>
+        </section>
+    </div>
+    
+    <script src="game.js"></script>
+</body>
+</html>

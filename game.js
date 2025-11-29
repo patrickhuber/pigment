@@ -124,7 +124,6 @@ function mixFactoryColors() {
     
     // Show the output pipe with factory animation
     if (elements.outputPipe) {
-        elements.outputPipe.style.setProperty('--pipe-color', rgbToString(mixed));
         elements.outputPipe.classList.add('active');
     }
     

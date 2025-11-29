@@ -9,7 +9,8 @@ const gameState = {
     slot2Color: null,
     resultColor: null,
     crabColor: [255, 107, 107], // Default coral color
-    selectedSlot: 1
+    selectedSlot: 1,
+    discoveredColors: new Set(['255,0,0', '255,255,0', '0,0,255']) // Primary colors
 };
 
 // DOM Elements
@@ -22,7 +23,11 @@ const elements = {
     feedBtn: document.getElementById('feed-btn'),
     crab: document.getElementById('crab'),
     crabStatus: document.getElementById('crab-status'),
-    colorBtns: document.querySelectorAll('.color-btn')
+    crabMouth: document.getElementById('crab-mouth'),
+    foodPellet: document.getElementById('food-pellet'),
+    outputPipe: document.getElementById('output-pipe'),
+    colorsContainer: document.getElementById('colors-container'),
+    colorBtns: null // Will be set dynamically
 };
 
 /**
@@ -117,7 +122,42 @@ function mixFactoryColors() {
     elements.result.style.backgroundColor = rgbToString(mixed);
     elements.result.classList.add('has-result');
     
+    // Show the output pipe with factory animation
+    if (elements.outputPipe) {
+        elements.outputPipe.style.setProperty('--pipe-color', rgbToString(mixed));
+        elements.outputPipe.classList.add('active');
+    }
+    
+    // Check if this is a new color and add it to the palette
+    const colorKey = `${mixed[0]},${mixed[1]},${mixed[2]}`;
+    if (!gameState.discoveredColors.has(colorKey)) {
+        addColorToPalette(mixed, colorKey);
+    }
+    
     updateUI();
+}
+
+/**
+ * Add a new discovered color to the palette
+ * @param {number[]} color - Color array [r, g, b]
+ * @param {string} colorKey - Color key string "r,g,b"
+ */
+function addColorToPalette(color, colorKey) {
+    gameState.discoveredColors.add(colorKey);
+    
+    const newBtn = document.createElement('button');
+    newBtn.className = 'color-btn new-color';
+    newBtn.dataset.color = colorKey;
+    newBtn.style.backgroundColor = rgbToString(color);
+    newBtn.title = `Mixed Color (${colorKey})`;
+    newBtn.addEventListener('click', handleColorClick);
+    
+    elements.colorsContainer.appendChild(newBtn);
+    
+    // Remove animation class after it completes
+    setTimeout(() => {
+        newBtn.classList.remove('new-color');
+    }, 500);
 }
 
 /**
@@ -137,6 +177,11 @@ function clearFactory() {
     elements.slot2.classList.remove('filled');
     elements.result.classList.remove('has-result');
     
+    // Hide output pipe
+    if (elements.outputPipe) {
+        elements.outputPipe.classList.remove('active', 'flowing');
+    }
+    
     updateUI();
 }
 
@@ -148,39 +193,76 @@ function feedCrab() {
         return;
     }
     
-    // Blend the new color with the crab's current color
-    const newCrabColor = mixColors(gameState.crabColor, gameState.resultColor);
-    gameState.crabColor = newCrabColor;
+    const feedColor = gameState.resultColor;
+    const colorString = rgbToString(feedColor);
     
-    // Animate the crab
-    elements.crab.classList.add('feeding', 'color-change');
+    // Start food pellet animation
+    if (elements.foodPellet) {
+        elements.foodPellet.style.backgroundColor = colorString;
+        elements.foodPellet.classList.add('falling');
+    }
     
-    // Change crab color
-    const colorString = rgbToString(newCrabColor);
-    const crabBody = elements.crab.querySelector('.crab-body');
-    const claws = elements.crab.querySelectorAll('.claw');
-    const legs = elements.crab.querySelectorAll('.leg');
+    // Start output pipe flowing animation
+    if (elements.outputPipe) {
+        elements.outputPipe.classList.add('flowing');
+    }
     
-    crabBody.style.backgroundColor = colorString;
-    claws.forEach(claw => {
-        claw.style.backgroundColor = colorString;
-    });
-    legs.forEach(leg => {
-        leg.style.backgroundColor = colorString;
-    });
+    // Start crab eating animation
+    elements.crab.classList.add('eating');
+    if (elements.crabMouth) {
+        elements.crabMouth.classList.add('eating');
+    }
     
-    // Update status
-    updateCrabStatus(newCrabColor);
+    // After food reaches crab, change color
+    setTimeout(() => {
+        // Blend the new color with the crab's current color
+        const newCrabColor = mixColors(gameState.crabColor, feedColor);
+        gameState.crabColor = newCrabColor;
+        
+        // Change crab color
+        const newColorString = rgbToString(newCrabColor);
+        const crabBody = elements.crab.querySelector('.crab-body');
+        const claws = elements.crab.querySelectorAll('.claw');
+        const legs = elements.crab.querySelectorAll('.leg');
+        
+        crabBody.style.backgroundColor = newColorString;
+        claws.forEach(claw => {
+            claw.style.backgroundColor = newColorString;
+        });
+        legs.forEach(leg => {
+            leg.style.backgroundColor = newColorString;
+        });
+        
+        // Add color change animation
+        elements.crab.classList.add('feeding', 'color-change');
+        
+        // Update status
+        updateCrabStatus(newCrabColor);
+    }, 600);
     
     // Clear the result
     gameState.resultColor = null;
     elements.result.style.backgroundColor = '';
     elements.result.classList.remove('has-result');
     
+    // Hide output pipe
+    if (elements.outputPipe) {
+        elements.outputPipe.classList.remove('active');
+    }
+    
     // Remove animation classes after animation completes
     setTimeout(() => {
-        elements.crab.classList.remove('feeding', 'color-change');
-    }, 500);
+        elements.crab.classList.remove('feeding', 'color-change', 'eating');
+        if (elements.crabMouth) {
+            elements.crabMouth.classList.remove('eating');
+        }
+        if (elements.foodPellet) {
+            elements.foodPellet.classList.remove('falling');
+        }
+        if (elements.outputPipe) {
+            elements.outputPipe.classList.remove('flowing');
+        }
+    }, 1200);
     
     updateUI();
 }
@@ -235,6 +317,9 @@ function updateUI() {
  * Initialize the game
  */
 function initGame() {
+    // Get color buttons (dynamic)
+    elements.colorBtns = document.querySelectorAll('.color-btn');
+    
     // Add event listeners to color buttons
     elements.colorBtns.forEach(btn => {
         btn.addEventListener('click', handleColorClick);

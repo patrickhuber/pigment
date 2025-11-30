@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pigment - Color Mixing Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>🎨 Pigment Factory 🦀</h1>
+        <p class="instructions">Mix colors in the factory, then feed the pigment to the crab!</p>
+        
+        <!-- Color Palette -->
+        <section class="color-palette">
+            <h2>Color Palette</h2>
+            <p class="palette-hint">Start with primary colors. Mix to discover new colors!</p>
+            <div class="colors" id="colors-container">
+                <button class="color-btn" data-color="255,0,0" style="background-color: rgb(255,0,0);" title="Red"></button>
+                <button class="color-btn" data-color="255,255,0" style="background-color: rgb(255,255,0);" title="Yellow"></button>
+                <button class="color-btn" data-color="0,0,255" style="background-color: rgb(0,0,255);" title="Blue"></button>
+            </div>
+        </section>
+        
+        <!-- Factory Mixing Area -->
+        <section class="factory">
+            <h2>🏭 Mixing Factory</h2>
+            <div class="mixing-area">
+                <div class="factory-machine">
+                    <div class="factory-building">
+                        <div class="factory-roof"></div>
+                        <div class="factory-chimney">
+                            <div class="smoke smoke1"></div>
+                            <div class="smoke smoke2"></div>
+                            <div class="smoke smoke3"></div>
+                        </div>
+                        <div class="factory-body">
+                            <div class="factory-window"></div>
+                            <div class="factory-window"></div>
+                        </div>
+                    </div>
+                    <div class="ingredient-slots">
+                        <div class="input-hopper">
+                            <div class="slot" id="slot1">
+                                <span class="slot-label">Input 1</span>
+                            </div>
+                            <div class="hopper-funnel"></div>
+                        </div>
+                        <span class="plus">+</span>
+                        <div class="input-hopper">
+                            <div class="slot" id="slot2">
+                                <span class="slot-label">Input 2</span>
+                            </div>
+                            <div class="hopper-funnel"></div>
+                        </div>
+                    </div>
+                    <div class="conveyor-belt">
+                        <div class="belt-line"></div>
+                        <div class="belt-roller"></div>
+                        <div class="belt-roller"></div>
+                        <div class="belt-roller"></div>
+                    </div>
+                    <div class="output-area">
+                        <div class="result-slot" id="result">
+                            <span class="slot-label">Output</span>
+                        </div>
+                        <div class="output-pipe" id="output-pipe"></div>
+                    </div>
+                </div>
+                <div class="factory-controls">
+                    <button id="mix-btn" class="action-btn">⚙️ Mix Colors!</button>
+                    <button id="clear-btn" class="action-btn secondary">🗑️ Clear Factory</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Crab Display -->
+        <section class="crab-area">
+            <h2>🦀 Feed the Crab!</h2>
+            <div class="crab-container">
+                <div class="food-pellet" id="food-pellet"></div>
+                <div class="crab" id="crab">
+                    <div class="crab-body">
+                        <div class="eye left-eye"></div>
+                        <div class="eye right-eye"></div>
+                        <div class="mouth" id="crab-mouth"></div>
+                    </div>
+                    <div class="claw left-claw"></div>
+                    <div class="claw right-claw"></div>
+                    <div class="legs">
+                        <div class="leg leg1"></div>
+                        <div class="leg leg2"></div>
+                        <div class="leg leg3"></div>
+                        <div class="leg leg4"></div>
+                        <div class="leg leg5"></div>
+                        <div class="leg leg6"></div>
+                    </div>
+                </div>
+            </div>
+            <button id="feed-btn" class="action-btn feed-btn" disabled>🍽️ Feed Crab!</button>
+            <p class="crab-status" id="crab-status">The crab is hungry! Mix some colors and feed it!</p>
+        </section>
+    </div>
+    
+    <script src="game.js"></script>
+</body>
+</html>

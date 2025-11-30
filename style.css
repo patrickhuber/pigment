@@ -1,0 +1,789 @@
+/* Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.game-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 2.5em;
+}
+
+h2 {
+    color: #555;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.instructions {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+/* Color Palette */
+.color-palette {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 15px;
+}
+
+.palette-hint {
+    text-align: center;
+    color: #888;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.colors {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.color-btn {
+    width: 50px;
+    height: 50px;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.color-btn:hover {
+    transform: scale(1.15);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.color-btn:active {
+    transform: scale(0.95);
+}
+
+.color-btn.selected {
+    border-color: #333;
+    box-shadow: 0 0 0 3px #333;
+}
+
+.color-btn.new-color {
+    animation: newColorPop 0.5s ease;
+}
+
+@keyframes newColorPop {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Factory Mixing Area */
+.factory {
+    margin-bottom: 30px;
+    padding: 25px;
+    background: linear-gradient(145deg, #e6e6e6, #ffffff);
+    border-radius: 15px;
+    border: 2px dashed #ccc;
+}
+
+.factory-machine {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Factory Building */
+.factory-building {
+    position: relative;
+    width: 200px;
+    height: 100px;
+}
+
+.factory-roof {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: 160px;
+    height: 30px;
+    background: linear-gradient(145deg, #8B4513, #654321);
+    clip-path: polygon(0 100%, 50% 0, 100% 100%);
+}
+
+.factory-chimney {
+    position: absolute;
+    top: -30px;
+    right: 40px;
+    width: 25px;
+    height: 50px;
+    background: linear-gradient(90deg, #666, #888);
+    border-radius: 3px 3px 0 0;
+}
+
+.smoke {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: rgba(150, 150, 150, 0.6);
+    border-radius: 50%;
+    top: -10px;
+    left: 5px;
+    animation: smokeRise 2s infinite;
+}
+
+.smoke2 { animation-delay: 0.5s; }
+.smoke3 { animation-delay: 1s; }
+
+@keyframes smokeRise {
+    0% { transform: translateY(0) scale(0.5); opacity: 0.8; }
+    100% { transform: translateY(-40px) scale(1.5); opacity: 0; }
+}
+
+.factory-body {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    width: 160px;
+    height: 60px;
+    background: linear-gradient(145deg, #d4a574, #c49464);
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+}
+
+.factory-window {
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(145deg, #87CEEB, #ADD8E6);
+    border: 3px solid #654321;
+    border-radius: 3px;
+}
+
+/* Input Hoppers */
+.ingredient-slots {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    justify-content: center;
+}
+
+.input-hopper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hopper-funnel {
+    width: 0;
+    height: 0;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-top: 20px solid #888;
+    margin-top: -5px;
+}
+
+.mixing-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Conveyor Belt */
+.conveyor-belt {
+    width: 250px;
+    height: 25px;
+    background: linear-gradient(90deg, #444, #666, #444);
+    border-radius: 5px;
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    overflow: hidden;
+}
+
+.belt-line {
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background: repeating-linear-gradient(
+        90deg,
+        #333 0px,
+        #333 10px,
+        #555 10px,
+        #555 20px
+    );
+    animation: beltMove 1s linear infinite;
+}
+
+@keyframes beltMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-20px); }
+}
+
+.belt-roller {
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #888, #555);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+/* Output Area */
+.output-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.output-pipe {
+    width: 30px;
+    height: 60px;
+    background: linear-gradient(90deg, #666, #888, #666);
+    border-radius: 0 0 10px 10px;
+    position: relative;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.output-pipe.active {
+    opacity: 1;
+}
+
+.output-pipe::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: inherit;
+    opacity: 0;
+}
+
+.output-pipe.flowing::after {
+    animation: colorDrip 0.8s ease-out forwards;
+}
+
+@keyframes colorDrip {
+    0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(100px); }
+}
+
+.slot, .result-slot {
+    width: 80px;
+    height: 80px;
+    border: 3px dashed #aaa;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.slot:hover {
+    border-color: #667eea;
+    background: #f0f0ff;
+}
+
+.slot.filled {
+    border-style: solid;
+    border-color: #4CAF50;
+}
+
+.result-slot {
+    width: 100px;
+    height: 100px;
+    border-color: #FFD700;
+    background: linear-gradient(145deg, #fff9e6, #fff);
+}
+
+.result-slot.has-result {
+    border-style: solid;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.5); }
+    50% { box-shadow: 0 0 20px 10px rgba(255, 215, 0, 0.3); }
+}
+
+.slot-label {
+    color: #999;
+    font-size: 0.8em;
+    text-align: center;
+}
+
+.slot.filled .slot-label,
+.result-slot.has-result .slot-label {
+    display: none;
+}
+
+.plus, .equals {
+    font-size: 2em;
+    font-weight: bold;
+    color: #888;
+}
+
+.factory-controls {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Buttons */
+.action-btn {
+    padding: 12px 30px;
+    font-size: 1.1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: linear-gradient(145deg, #667eea, #764ba2);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.action-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.action-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.action-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.action-btn.secondary {
+    background: linear-gradient(145deg, #6c757d, #495057);
+    box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
+}
+
+.action-btn.secondary:hover {
+    box-shadow: 0 6px 20px rgba(108, 117, 125, 0.5);
+}
+
+/* Crab Area */
+.crab-area {
+    text-align: center;
+    padding: 25px;
+    background: linear-gradient(145deg, #e8f5e9, #c8e6c9);
+    border-radius: 15px;
+}
+
+.crab-container {
+    margin: 30px auto;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    min-height: 180px;
+}
+
+/* Food Pellet Animation */
+.food-pellet {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.food-pellet.falling {
+    animation: foodFall 0.8s ease-in forwards;
+}
+
+@keyframes foodFall {
+    0% { 
+        opacity: 1; 
+        top: 0; 
+        transform: translateX(-50%) scale(1);
+    }
+    70% { 
+        opacity: 1; 
+        top: 60px;
+        transform: translateX(-50%) scale(1);
+    }
+    85% {
+        opacity: 1;
+        top: 50px;
+        transform: translateX(-50%) scale(0.8);
+    }
+    100% { 
+        opacity: 0; 
+        top: 60px;
+        transform: translateX(-50%) scale(0);
+    }
+}
+
+/* Crab Styling - Cartoon Style */
+.crab {
+    position: relative;
+    width: 160px;
+    height: 130px;
+    transition: all 0.5s ease;
+    margin-top: 50px;
+}
+
+.crab-body {
+    position: absolute;
+    width: 90px;
+    height: 60px;
+    background: #f5f5f5;
+    border-radius: 50%;
+    left: 50%;
+    top: 40px;
+    transform: translateX(-50%);
+    box-shadow: 
+        inset -8px -8px 15px rgba(0,0,0,0.1),
+        inset 8px 8px 15px rgba(255,255,255,0.5),
+        0 2px 5px rgba(0,0,0,0.1);
+    transition: background-color 0.5s ease;
+    z-index: 2;
+}
+
+/* Eye stalks */
+.eye {
+    position: absolute;
+    width: 14px;
+    height: 22px;
+    background: #fff;
+    border-radius: 50%;
+    top: -18px;
+    z-index: 3;
+    border: 2px solid rgba(0,0,0,0.1);
+}
+
+/* Eye stalk (the stick part) */
+.eye::before {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 12px;
+    background: inherit;
+    border-radius: 3px;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: -1;
+}
+
+/* Pupil */
+.eye::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #333;
+    border-radius: 50%;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.left-eye {
+    left: 28px;
+    transform: rotate(-10deg);
+}
+
+.right-eye {
+    right: 28px;
+    transform: rotate(10deg);
+}
+
+/* Happy smile mouth */
+.mouth {
+    position: absolute;
+    width: 30px;
+    height: 15px;
+    background: #333;
+    border-radius: 0 0 30px 30px;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: all 0.1s;
+    z-index: 3;
+}
+
+/* Smile highlight */
+.mouth::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 8px;
+    background: #c0392b;
+    border-radius: 0 0 20px 20px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.mouth.eating {
+    animation: mouthChomp 0.4s ease infinite;
+}
+
+@keyframes mouthChomp {
+    0%, 100% { 
+        height: 15px;
+        border-radius: 0 0 30px 30px;
+    }
+    50% { 
+        height: 20px;
+        border-radius: 50%;
+    }
+}
+
+/* Cartoon Crab Claws - Big friendly pincers */
+.claw {
+    position: absolute;
+    width: 35px;
+    height: 28px;
+    background: #f5f5f5;
+    border-radius: 50% 50% 45% 45%;
+    top: 45px;
+    box-shadow: 
+        inset -3px -3px 8px rgba(0,0,0,0.1),
+        inset 3px 3px 8px rgba(255,255,255,0.5),
+        0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.5s ease, transform 0.2s;
+    z-index: 3;
+}
+
+/* Claw arm connecting to body */
+.claw::before {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 18px;
+    background: inherit;
+    border-radius: 8px;
+    top: 5px;
+}
+
+/* Upper pincer (the moving part) */
+.claw::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 14px;
+    background: inherit;
+    border-radius: 50% 50% 30% 30%;
+    top: -8px;
+    box-shadow: inset 0 -2px 4px rgba(0,0,0,0.1);
+}
+
+.left-claw {
+    left: 8px;
+    transform: rotate(-25deg);
+}
+
+.left-claw::before {
+    right: -8px;
+}
+
+.left-claw::after {
+    left: 3px;
+    transform: rotate(25deg);
+}
+
+.right-claw {
+    right: 8px;
+    transform: rotate(25deg);
+}
+
+.right-claw::before {
+    left: -8px;
+}
+
+.right-claw::after {
+    right: 3px;
+    transform: rotate(-25deg);
+}
+
+/* Claw grab animation when eating */
+.crab.eating .left-claw {
+    animation: leftClawGrab 0.4s ease infinite;
+}
+
+.crab.eating .right-claw {
+    animation: rightClawGrab 0.4s ease infinite;
+}
+
+@keyframes leftClawGrab {
+    0%, 100% { transform: rotate(-25deg); }
+    50% { transform: rotate(-10deg) translateX(8px); }
+}
+
+@keyframes rightClawGrab {
+    0%, 100% { transform: rotate(25deg); }
+    50% { transform: rotate(10deg) translateX(-8px); }
+}
+
+/* Legs - Cartoon style curved legs */
+.legs {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.leg {
+    position: absolute;
+    width: 8px;
+    height: 20px;
+    background: #f5f5f5;
+    border-radius: 4px 4px 6px 6px;
+    transition: background-color 0.5s ease;
+    transform-origin: top center;
+    box-shadow: inset -1px -2px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Add cute foot to each leg */
+.leg::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 6px;
+    background: inherit;
+    border-radius: 0 0 5px 5px;
+    bottom: -3px;
+    left: -1px;
+}
+
+/* Left side legs - curved outward */
+.leg1 { 
+    left: 30px; 
+    top: 80px; 
+    transform: rotate(-50deg); 
+}
+.leg2 { 
+    left: 42px; 
+    top: 88px; 
+    transform: rotate(-25deg); 
+}
+.leg3 { 
+    left: 55px; 
+    top: 92px; 
+    transform: rotate(-5deg); 
+}
+
+/* Right side legs - curved outward */
+.leg4 { 
+    right: 55px; 
+    top: 92px; 
+    transform: rotate(5deg); 
+}
+.leg5 { 
+    right: 42px; 
+    top: 88px; 
+    transform: rotate(25deg); 
+}
+.leg6 { 
+    right: 30px; 
+    top: 80px; 
+    transform: rotate(50deg); 
+}
+
+.feed-btn {
+    background: linear-gradient(145deg, #4CAF50, #45a049);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+    margin-top: 10px;
+}
+
+.feed-btn:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+}
+
+.crab-status {
+    margin-top: 15px;
+    color: #555;
+    font-style: italic;
+}
+
+/* Feeding Animation */
+.crab.feeding {
+    animation: crabDance 0.5s ease-in-out;
+}
+
+@keyframes crabDance {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-10px) rotate(-5deg); }
+    50% { transform: translateY(0) rotate(0deg); }
+    75% { transform: translateY(-10px) rotate(5deg); }
+}
+
+/* Color transition effect */
+.crab.color-change .crab-body,
+.crab.color-change .claw,
+.crab.color-change .leg {
+    animation: colorPop 0.5s ease;
+}
+
+@keyframes colorPop {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .game-container {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    .slot, .result-slot {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .result-slot {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .color-btn {
+        width: 40px;
+        height: 40px;
+    }
+}

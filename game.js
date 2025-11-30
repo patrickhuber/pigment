@@ -351,8 +351,8 @@ function feedCrab() {
     
     // After food reaches crab, change color
     setTimeout(() => {
-        // Blend the new color with the crab's current color
-        const newCrabColor = mixColors(gameState.crabColor, feedColor);
+        // Apply the exact mixed color to the crab (no blending with previous color)
+        const newCrabColor = feedColor;
         gameState.crabColor = newCrabColor;
         
         // Change crab color

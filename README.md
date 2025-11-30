@@ -2,6 +2,8 @@
 
 A browser-based game where you create a factory to combine colors together. The resulting pigments are fed to a crab. When you feed the crab, he changes colors!
 
+**[▶️ Play Now](https://patrickhuber.github.io/pigment/)**
+
 ## How to Play
 
 1. **Select Colors**: Click on colors from the palette to add them to the mixing slots

@@ -50,17 +50,129 @@ function rgbToString(colorArray) {
 }
 
 /**
- * Mix two colors together using RGB averaging
- * This produces a subtractive-like mixing effect similar to paint mixing
+ * Mix two colors together using RYB (artistic) color mixing simulation
+ * This simulates traditional paint mixing where blue + yellow = green
  * @param {number[]} color1 - First color [r, g, b]
  * @param {number[]} color2 - Second color [r, g, b]
  * @returns {number[]} Mixed color [r, g, b]
  */
 function mixColors(color1, color2) {
+    // Convert RGB to RYB for artistic color mixing
+    const ryb1 = rgbToRyb(color1);
+    const ryb2 = rgbToRyb(color2);
+    
+    // Mix in RYB space by averaging
+    const mixedRyb = [
+        Math.round((ryb1[0] + ryb2[0]) / 2),
+        Math.round((ryb1[1] + ryb2[1]) / 2),
+        Math.round((ryb1[2] + ryb2[2]) / 2)
+    ];
+    
+    // Convert back to RGB
+    return rybToRgb(mixedRyb);
+}
+
+/**
+ * Convert RGB color to RYB color space
+ * @param {number[]} rgb - RGB color [r, g, b]
+ * @returns {number[]} RYB color [r, y, b]
+ */
+function rgbToRyb(rgb) {
+    let r = rgb[0];
+    let g = rgb[1];
+    let b = rgb[2];
+    
+    // Remove whiteness from the color
+    const white = Math.min(r, g, b);
+    r -= white;
+    g -= white;
+    b -= white;
+    
+    const maxG = Math.max(r, g, b);
+    
+    // Get yellow out of red+green
+    let y = Math.min(r, g);
+    r -= y;
+    g -= y;
+    
+    // If blue and green, cut both in half to make blue
+    if (b > 0 && g > 0) {
+        b = Math.floor(b / 2);
+        g = Math.floor(g / 2);
+    }
+    
+    // Redistribute remaining green: in RYB, green contributes to both yellow and blue
+    y += g;
+    b += g;
+    
+    // Normalize to max value
+    const maxRYB = Math.max(r, y, b);
+    if (maxRYB > 0) {
+        const factor = maxG / maxRYB;
+        r = Math.round(r * factor);
+        y = Math.round(y * factor);
+        b = Math.round(b * factor);
+    }
+    
+    // Add whiteness back
+    r += white;
+    y += white;
+    b += white;
+    
+    return [r, y, b];
+}
+
+/**
+ * Convert RYB color to RGB color space
+ * @param {number[]} ryb - RYB color [r, y, b]
+ * @returns {number[]} RGB color [r, g, b]
+ */
+function rybToRgb(ryb) {
+    let r = ryb[0];
+    let y = ryb[1];
+    let b = ryb[2];
+    
+    // Remove whiteness
+    const white = Math.min(r, y, b);
+    r -= white;
+    y -= white;
+    b -= white;
+    
+    const maxY = Math.max(r, y, b);
+    
+    // Get green from yellow and blue
+    let g = Math.min(y, b);
+    y -= g;
+    b -= g;
+    
+    // Scale blue and green back up (inverse of division in rgbToRyb)
+    if (b > 0 && g > 0) {
+        b = Math.floor(b * 2);
+        g = Math.floor(g * 2);
+    }
+    
+    // Yellow contributes to both red and green in RGB
+    r += y;
+    g += y;
+    
+    // Normalize
+    const maxRGB = Math.max(r, g, b);
+    if (maxRGB > 0) {
+        const factor = maxY / maxRGB;
+        r = Math.round(r * factor);
+        g = Math.round(g * factor);
+        b = Math.round(b * factor);
+    }
+    
+    // Add whiteness back
+    r += white;
+    g += white;
+    b += white;
+    
     return [
-        Math.round((color1[0] + color2[0]) / 2),
-        Math.round((color1[1] + color2[1]) / 2),
-        Math.round((color1[2] + color2[2]) / 2)
+        Math.min(255, Math.max(0, r)),
+        Math.min(255, Math.max(0, g)),
+        Math.min(255, Math.max(0, b))
     ];
 }
 

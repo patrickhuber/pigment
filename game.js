@@ -101,7 +101,7 @@ function rgbToRyb(rgb) {
         g = Math.floor(g / 2);
     }
     
-    // Add green to yellow to make yellow
+    // Redistribute remaining green: in RYB, green contributes to both yellow and blue
     y += g;
     b += g;
     
@@ -145,13 +145,13 @@ function rybToRgb(ryb) {
     y -= g;
     b -= g;
     
-    // If blue and green, cut both in half
+    // Scale blue and green back up (inverse of division in rgbToRyb)
     if (b > 0 && g > 0) {
         b = Math.floor(b * 2);
         g = Math.floor(g * 2);
     }
     
-    // Get green back from yellow
+    // Yellow contributes to both red and green in RGB
     r += y;
     g += y;
     

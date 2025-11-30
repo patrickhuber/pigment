@@ -259,6 +259,16 @@ h2 {
     gap: 10px;
 }
 
+.output-color-value {
+    font-size: 0.9em;
+    color: #555;
+    font-family: monospace;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 4px 10px;
+    border-radius: 8px;
+    min-height: 24px;
+}
+
 .output-pipe {
     width: 30px;
     height: 60px;
@@ -322,7 +332,7 @@ h2 {
     width: 100px;
     height: 100px;
     border-color: #FFD700;
-    background: linear-gradient(145deg, #fff9e6, #fff);
+    background-color: #fff9e6;
 }
 
 .result-slot.has-result {

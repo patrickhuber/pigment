@@ -26,6 +26,7 @@ const elements = {
     crabMouth: document.getElementById('crab-mouth'),
     foodPellet: document.getElementById('food-pellet'),
     outputPipe: document.getElementById('output-pipe'),
+    outputColorValue: document.getElementById('output-color-value'),
     colorsContainer: document.getElementById('colors-container'),
     colorBtns: null // Will be set dynamically
 };
@@ -122,13 +123,18 @@ function mixFactoryColors() {
     elements.result.style.backgroundColor = rgbToString(mixed);
     elements.result.classList.add('has-result');
     
+    // Display the output color value
+    const colorKey = `${mixed[0]},${mixed[1]},${mixed[2]}`;
+    if (elements.outputColorValue) {
+        elements.outputColorValue.textContent = `RGB(${colorKey})`;
+    }
+    
     // Show the output pipe with factory animation
     if (elements.outputPipe) {
         elements.outputPipe.classList.add('active');
     }
     
     // Check if this is a new color and add it to the palette
-    const colorKey = `${mixed[0]},${mixed[1]},${mixed[2]}`;
     if (!gameState.discoveredColors.has(colorKey)) {
         addColorToPalette(mixed, colorKey);
     }
@@ -175,6 +181,11 @@ function clearFactory() {
     elements.slot1.classList.remove('filled');
     elements.slot2.classList.remove('filled');
     elements.result.classList.remove('has-result');
+    
+    // Clear output color value
+    if (elements.outputColorValue) {
+        elements.outputColorValue.textContent = '';
+    }
     
     // Hide output pipe
     if (elements.outputPipe) {
@@ -243,6 +254,11 @@ function feedCrab() {
     gameState.resultColor = null;
     elements.result.style.backgroundColor = '';
     elements.result.classList.remove('has-result');
+    
+    // Clear output color value
+    if (elements.outputColorValue) {
+        elements.outputColorValue.textContent = '';
+    }
     
     // Hide output pipe
     if (elements.outputPipe) {

@@ -73,7 +73,75 @@ function mixColors(color1, color2) {
 }
 
 /**
+ * Trilinear interpolation helper for RYB/RGB conversion
+ * @param {number} t - Interpolation factor (0-1)
+ * @param {number} a - First value
+ * @param {number} b - Second value
+ * @returns {number} Interpolated value
+ */
+function cubicInt(t, a, b) {
+    const weight = t * t * (3 - 2 * t);
+    return a + weight * (b - a);
+}
+
+/**
+ * Interpolate a single color component using trilinear interpolation
+ * This maps artistic RYB color mixing to RGB display colors
+ * @param {number} iR - Red factor (0-1)
+ * @param {number} iY - Yellow factor (0-1) 
+ * @param {number} iB - Blue factor (0-1)
+ * @param {number[][]} colors - Array of 8 RGB corner colors
+ * @param {number} component - Color component index (0=R, 1=G, 2=B)
+ * @returns {number} Interpolated color component value
+ */
+function interpolateComponent(iR, iY, iB, colors, component) {
+    const x0 = cubicInt(iB, colors[0][component], colors[1][component]);
+    const x1 = cubicInt(iB, colors[2][component], colors[3][component]);
+    const x2 = cubicInt(iB, colors[4][component], colors[5][component]);
+    const x3 = cubicInt(iB, colors[6][component], colors[7][component]);
+    const y0 = cubicInt(iY, x0, x1);
+    const y1 = cubicInt(iY, x2, x3);
+    return cubicInt(iR, y0, y1);
+}
+
+/**
+ * Convert RYB color to RGB color space using trilinear interpolation
+ * Maps artistic color mixing (RYB) to display colors (RGB)
+ * @param {number[]} ryb - RYB color [r, y, b] (0-255 each)
+ * @returns {number[]} RGB color [r, g, b]
+ */
+function rybToRgb(ryb) {
+    // RYB cube corners mapped to RGB values
+    // These define how RYB colors map to RGB for artistic color mixing
+    const COLORS = [
+        [255, 255, 255], // white (no color)
+        [0, 0, 255],     // blue
+        [255, 255, 0],   // yellow
+        [0, 255, 0],     // green (yellow + blue)
+        [255, 0, 0],     // red
+        [128, 0, 128],   // purple (red + blue)
+        [255, 128, 0],   // orange (red + yellow)
+        [0, 0, 0]        // black (all colors)
+    ];
+    
+    const r = ryb[0] / 255;
+    const y = ryb[1] / 255;
+    const b = ryb[2] / 255;
+    
+    const outR = interpolateComponent(r, y, b, COLORS, 0);
+    const outG = interpolateComponent(r, y, b, COLORS, 1);
+    const outB = interpolateComponent(r, y, b, COLORS, 2);
+    
+    return [
+        Math.round(Math.min(255, Math.max(0, outR))),
+        Math.round(Math.min(255, Math.max(0, outG))),
+        Math.round(Math.min(255, Math.max(0, outB)))
+    ];
+}
+
+/**
  * Convert RGB color to RYB color space
+ * This is an approximation for mixing purposes
  * @param {number[]} rgb - RGB color [r, g, b]
  * @returns {number[]} RYB color [r, y, b]
  */
@@ -120,60 +188,6 @@ function rgbToRyb(rgb) {
     b += white;
     
     return [r, y, b];
-}
-
-/**
- * Convert RYB color to RGB color space
- * @param {number[]} ryb - RYB color [r, y, b]
- * @returns {number[]} RGB color [r, g, b]
- */
-function rybToRgb(ryb) {
-    let r = ryb[0];
-    let y = ryb[1];
-    let b = ryb[2];
-    
-    // Remove whiteness
-    const white = Math.min(r, y, b);
-    r -= white;
-    y -= white;
-    b -= white;
-    
-    const maxY = Math.max(r, y, b);
-    
-    // Get green from yellow and blue
-    let g = Math.min(y, b);
-    y -= g;
-    b -= g;
-    
-    // Scale blue and green back up (inverse of division in rgbToRyb)
-    if (b > 0 && g > 0) {
-        b = Math.floor(b * 2);
-        g = Math.floor(g * 2);
-    }
-    
-    // Yellow contributes to both red and green in RGB
-    r += y;
-    g += y;
-    
-    // Normalize
-    const maxRGB = Math.max(r, g, b);
-    if (maxRGB > 0) {
-        const factor = maxY / maxRGB;
-        r = Math.round(r * factor);
-        g = Math.round(g * factor);
-        b = Math.round(b * factor);
-    }
-    
-    // Add whiteness back
-    r += white;
-    g += white;
-    b += white;
-    
-    return [
-        Math.min(255, Math.max(0, r)),
-        Math.min(255, Math.max(0, g)),
-        Math.min(255, Math.max(0, b))
-    ];
 }
 
 /**

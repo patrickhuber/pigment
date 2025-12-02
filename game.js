@@ -297,7 +297,6 @@ function addFactoryToInventory(color, colorKey) {
                 <div class="mini-smoke"></div>
             </div>
             <div class="mini-factory-body"></div>
-            <div class="mini-color-output"></div>
         </div>
         <span class="factory-label">Mixed</span>
         <span class="place-hint">Click to place</span>
@@ -360,7 +359,6 @@ function addFactoryToPalette(color, colorKey) {
                 <div class="mini-smoke"></div>
             </div>
             <div class="mini-factory-body"></div>
-            <div class="mini-color-output"></div>
         </div>
         <span class="factory-label">Mixed</span>
     `;

@@ -1,0 +1,15 @@
+{
+  "name": "pigment",
+  "version": "1.0.0",
+  "description": "A browser-based game where you create a factory to combine colors together. The resulting pigments are fed to a crab. When you feed the crab, he changes colors!",
+  "main": "game.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

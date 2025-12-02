@@ -11,14 +11,50 @@
         <h1>🎨 Pigment Factory 🦀</h1>
         <p class="instructions">Mix colors in the factory, then feed the pigment to the crab!</p>
         
-        <!-- Color Palette -->
+        <!-- Color Factories Palette -->
         <section class="color-palette">
-            <h2>Color Palette</h2>
-            <p class="palette-hint">Start with primary colors. Mix to discover new colors!</p>
-            <div class="colors" id="colors-container">
-                <button class="color-btn" data-color="255,0,0" style="background-color: rgb(255,0,0);" title="Red"></button>
-                <button class="color-btn" data-color="255,255,0" style="background-color: rgb(255,255,0);" title="Yellow"></button>
-                <button class="color-btn" data-color="0,0,255" style="background-color: rgb(0,0,255);" title="Blue"></button>
+            <h2>🏭 Color Factories</h2>
+            <p class="palette-hint">Click a factory to add its color to the mixer!</p>
+            <div class="factories" id="factories-container">
+                <div class="color-factory" data-color="255,0,0" title="Red Factory">
+                    <div class="mini-factory-building" style="--factory-color: rgb(255,0,0);">
+                        <div class="mini-chimney">
+                            <div class="mini-smoke"></div>
+                        </div>
+                        <div class="mini-factory-body"></div>
+                        <div class="mini-color-output"></div>
+                    </div>
+                    <span class="factory-label">Red</span>
+                </div>
+                <div class="color-factory" data-color="255,255,0" title="Yellow Factory">
+                    <div class="mini-factory-building" style="--factory-color: rgb(255,255,0);">
+                        <div class="mini-chimney">
+                            <div class="mini-smoke"></div>
+                        </div>
+                        <div class="mini-factory-body"></div>
+                        <div class="mini-color-output"></div>
+                    </div>
+                    <span class="factory-label">Yellow</span>
+                </div>
+                <div class="color-factory" data-color="0,0,255" title="Blue Factory">
+                    <div class="mini-factory-building" style="--factory-color: rgb(0,0,255);">
+                        <div class="mini-chimney">
+                            <div class="mini-smoke"></div>
+                        </div>
+                        <div class="mini-factory-body"></div>
+                        <div class="mini-color-output"></div>
+                    </div>
+                    <span class="factory-label">Blue</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Factory Inventory -->
+        <section class="factory-inventory" id="factory-inventory">
+            <h2>📦 Factory Inventory</h2>
+            <p class="inventory-hint">New factories appear here when you mix colors. Click to place them!</p>
+            <div class="inventory-items" id="inventory-items">
+                <p class="empty-inventory">No factories yet. Mix some colors!</p>
             </div>
         </section>
         

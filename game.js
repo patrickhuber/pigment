@@ -10,7 +10,8 @@ const gameState = {
     resultColor: null,
     crabColor: [245, 245, 245], // Default white color
     selectedSlot: 1,
-    discoveredColors: new Set(['255,0,0', '255,255,0', '0,0,255']) // Primary colors
+    discoveredColors: new Set(['255,0,0', '255,255,0', '0,0,255']), // Primary colors (active in palette)
+    inventoryFactories: new Set() // Factories waiting to be placed
 };
 
 // DOM Elements
@@ -27,8 +28,9 @@ const elements = {
     foodPellet: document.getElementById('food-pellet'),
     outputPipe: document.getElementById('output-pipe'),
     outputColorValue: document.getElementById('output-color-value'),
-    colorsContainer: document.getElementById('colors-container'),
-    colorBtns: null // Will be set dynamically
+    factoriesContainer: document.getElementById('factories-container'),
+    inventoryItems: document.getElementById('inventory-items'),
+    colorFactories: null // Will be set dynamically
 };
 
 /**
@@ -216,11 +218,14 @@ function fillSlot(slotNum, color) {
 }
 
 /**
- * Handle color button click
+ * Handle color factory click
  * @param {Event} event - Click event
  */
-function handleColorClick(event) {
-    const colorStr = event.target.dataset.color;
+function handleFactoryClick(event) {
+    const factory = event.target.closest('.color-factory');
+    if (!factory) return;
+    
+    const colorStr = factory.dataset.color;
     const color = parseColor(colorStr);
     
     // Fill the appropriate slot
@@ -260,34 +265,112 @@ function mixFactoryColors() {
         elements.outputPipe.classList.add('active');
     }
     
-    // Check if this is a new color and add it to the palette
-    if (!gameState.discoveredColors.has(colorKey)) {
-        addColorToPalette(mixed, colorKey);
+    // Check if this is a new color and add a factory to inventory
+    if (!gameState.discoveredColors.has(colorKey) && !gameState.inventoryFactories.has(colorKey)) {
+        addFactoryToInventory(mixed, colorKey);
     }
     
     updateUI();
 }
 
 /**
- * Add a new discovered color to the palette
+ * Add a new factory to the inventory
  * @param {number[]} color - Color array [r, g, b]
  * @param {string} colorKey - Color key string "r,g,b"
  */
-function addColorToPalette(color, colorKey) {
-    gameState.discoveredColors.add(colorKey);
+function addFactoryToInventory(color, colorKey) {
+    gameState.inventoryFactories.add(colorKey);
     
-    const newBtn = document.createElement('button');
-    newBtn.className = 'color-btn new-color';
-    newBtn.dataset.color = colorKey;
-    newBtn.style.backgroundColor = rgbToString(color);
-    newBtn.title = `Mixed Color (${colorKey})`;
-    newBtn.addEventListener('click', handleColorClick);
+    // Clear empty inventory message
+    const emptyMsg = elements.inventoryItems.querySelector('.empty-inventory');
+    if (emptyMsg) {
+        emptyMsg.remove();
+    }
     
-    elements.colorsContainer.appendChild(newBtn);
+    const newFactory = document.createElement('div');
+    newFactory.className = 'inventory-factory new-factory';
+    newFactory.dataset.color = colorKey;
+    newFactory.title = `Mixed Color Factory (${colorKey})`;
+    newFactory.innerHTML = `
+        <div class="mini-factory-building" style="--factory-color: ${rgbToString(color)};">
+            <div class="mini-chimney">
+                <div class="mini-smoke"></div>
+            </div>
+            <div class="mini-factory-body"></div>
+            <div class="mini-color-output"></div>
+        </div>
+        <span class="factory-label">Mixed</span>
+        <span class="place-hint">Click to place</span>
+    `;
+    newFactory.addEventListener('click', handleInventoryFactoryClick);
+    
+    elements.inventoryItems.appendChild(newFactory);
     
     // Remove animation class after it completes
     setTimeout(() => {
-        newBtn.classList.remove('new-color');
+        newFactory.classList.remove('new-factory');
+    }, 500);
+}
+
+/**
+ * Handle click on inventory factory to place it in the palette
+ * @param {Event} event - Click event
+ */
+function handleInventoryFactoryClick(event) {
+    const inventoryFactory = event.target.closest('.inventory-factory');
+    if (!inventoryFactory) return;
+    
+    const colorKey = inventoryFactory.dataset.color;
+    const color = parseColor(colorKey);
+    
+    // Add to discovered colors
+    gameState.discoveredColors.add(colorKey);
+    
+    // Remove from inventory
+    gameState.inventoryFactories.delete(colorKey);
+    
+    // Remove from DOM
+    inventoryFactory.remove();
+    
+    // Show empty message if inventory is empty
+    if (gameState.inventoryFactories.size === 0) {
+        const emptyMsg = document.createElement('p');
+        emptyMsg.className = 'empty-inventory';
+        emptyMsg.textContent = 'No factories yet. Mix some colors!';
+        elements.inventoryItems.appendChild(emptyMsg);
+    }
+    
+    // Add to palette
+    addFactoryToPalette(color, colorKey);
+}
+
+/**
+ * Add a factory to the palette
+ * @param {number[]} color - Color array [r, g, b]
+ * @param {string} colorKey - Color key string "r,g,b"
+ */
+function addFactoryToPalette(color, colorKey) {
+    const newFactory = document.createElement('div');
+    newFactory.className = 'color-factory new-factory';
+    newFactory.dataset.color = colorKey;
+    newFactory.title = `Mixed Color Factory (${colorKey})`;
+    newFactory.innerHTML = `
+        <div class="mini-factory-building" style="--factory-color: ${rgbToString(color)};">
+            <div class="mini-chimney">
+                <div class="mini-smoke"></div>
+            </div>
+            <div class="mini-factory-body"></div>
+            <div class="mini-color-output"></div>
+        </div>
+        <span class="factory-label">Mixed</span>
+    `;
+    newFactory.addEventListener('click', handleFactoryClick);
+    
+    elements.factoriesContainer.appendChild(newFactory);
+    
+    // Remove animation class after it completes
+    setTimeout(() => {
+        newFactory.classList.remove('new-factory');
     }, 500);
 }
 
@@ -458,12 +541,12 @@ function updateUI() {
  * Initialize the game
  */
 function initGame() {
-    // Get color buttons (dynamic)
-    elements.colorBtns = document.querySelectorAll('.color-btn');
+    // Get color factory elements (dynamic)
+    elements.colorFactories = document.querySelectorAll('.color-factory');
     
-    // Add event listeners to color buttons
-    elements.colorBtns.forEach(btn => {
-        btn.addEventListener('click', handleColorClick);
+    // Add event listeners to color factories
+    elements.colorFactories.forEach(factory => {
+        factory.addEventListener('click', handleFactoryClick);
     });
     
     // Add event listeners to action buttons

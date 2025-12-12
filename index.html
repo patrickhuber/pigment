@@ -8,131 +8,39 @@
 </head>
 <body>
     <div class="game-container">
-        <h1>🎨 Pigment Factory 🦀</h1>
-        <p class="instructions">Mix colors in the factory, then feed the pigment to the crab!</p>
-        
-        <!-- Color Factories Palette -->
-        <section class="color-palette">
-            <h2>🏭 Color Factories</h2>
-            <p class="palette-hint">Click a factory to add its color to the mixer!</p>
-            <div class="factories" id="factories-container">
-                <div class="color-factory" data-color="255,0,0" title="Red Factory">
-                    <div class="mini-factory-building" style="--factory-color: rgb(255,0,0);">
-                        <div class="mini-chimney">
-                            <div class="mini-smoke"></div>
-                        </div>
-                        <div class="mini-factory-body"></div>
-                    </div>
-                    <span class="factory-label">Red</span>
+        <h1>🎨 Pigment Factory Grid</h1>
+        <p class="instructions">Drag factories, adders, storage, and gradientors onto the grid. Tap ports to link, drag to move, delete to remove.</p>
+
+        <section class="grid-section">
+            <div class="grid-header">
+                <div class="grid-title">
+                    <h2>Factory Workbench</h2>
+                    <p class="palette-hint">Create links from outputs to inputs. You cannot link a component to itself.</p>
                 </div>
-                <div class="color-factory" data-color="255,255,0" title="Yellow Factory">
-                    <div class="mini-factory-building" style="--factory-color: rgb(255,255,0);">
-                        <div class="mini-chimney">
-                            <div class="mini-smoke"></div>
-                        </div>
-                        <div class="mini-factory-body"></div>
-                    </div>
-                    <span class="factory-label">Yellow</span>
-                </div>
-                <div class="color-factory" data-color="0,0,255" title="Blue Factory">
-                    <div class="mini-factory-building" style="--factory-color: rgb(0,0,255);">
-                        <div class="mini-chimney">
-                            <div class="mini-smoke"></div>
-                        </div>
-                        <div class="mini-factory-body"></div>
-                    </div>
-                    <span class="factory-label">Blue</span>
+                <div class="grid-toolbar" id="grid-toolbar">
+                    <button class="toolbar-btn" data-add="factory" data-color="255,0,0">Add Red Factory</button>
+                    <button class="toolbar-btn" data-add="factory" data-color="255,255,0">Add Yellow Factory</button>
+                    <button class="toolbar-btn" data-add="factory" data-color="0,0,255">Add Blue Factory</button>
+                    <button class="toolbar-btn" data-add="gradientor" data-mode="lighten">Add Brightener</button>
+                    <button class="toolbar-btn" data-add="gradientor" data-mode="darken">Add Darkener</button>
+                    <button class="toolbar-btn" data-add="adder">Add Adder</button>
+                    <button class="toolbar-btn" data-add="storage">Add Storage</button>
+                    <button class="toolbar-btn secondary" id="reset-grid">Reset Grid</button>
                 </div>
             </div>
-        </section>
-        
-        <!-- Factory Inventory -->
-        <section class="factory-inventory" id="factory-inventory">
-            <h2>📦 Factory Inventory</h2>
-            <p class="inventory-hint">New factories appear here when you mix colors. Click to place them!</p>
-            <div class="inventory-items" id="inventory-items">
-                <p class="empty-inventory">No factories yet. Mix some colors!</p>
+
+            <div class="grid-legend">
+                <span>Factory = 4 outputs</span>
+                <span>Adder = 2 inputs → 1 output (can fan out)</span>
+                <span>Brightener/Darkener = 1 in → 1 out (can fan out)</span>
+                <span>Storage = 6 flexible ports (needs ≥1 in + 1 out)</span>
+                <span>Tap a port to start a link, tap another to finish</span>
             </div>
-        </section>
-        
-        <!-- Factory Mixing Area -->
-        <section class="factory">
-            <h2>🏭 Mixing Factory</h2>
-            <div class="mixing-area">
-                <div class="factory-machine">
-                    <div class="factory-building">
-                        <div class="factory-roof"></div>
-                        <div class="factory-chimney">
-                            <div class="smoke smoke1"></div>
-                            <div class="smoke smoke2"></div>
-                            <div class="smoke smoke3"></div>
-                        </div>
-                        <div class="factory-body">
-                            <div class="factory-window"></div>
-                            <div class="factory-window"></div>
-                        </div>
-                    </div>
-                    <div class="ingredient-slots">
-                        <div class="input-hopper">
-                            <div class="slot" id="slot1">
-                                <span class="slot-label">Input 1</span>
-                            </div>
-                            <div class="hopper-funnel"></div>
-                        </div>
-                        <span class="plus">+</span>
-                        <div class="input-hopper">
-                            <div class="slot" id="slot2">
-                                <span class="slot-label">Input 2</span>
-                            </div>
-                            <div class="hopper-funnel"></div>
-                        </div>
-                    </div>
-                    <div class="conveyor-belt">
-                        <div class="belt-line"></div>
-                        <div class="belt-roller"></div>
-                        <div class="belt-roller"></div>
-                        <div class="belt-roller"></div>
-                    </div>
-                    <div class="output-area">
-                        <div class="result-slot" id="result">
-                            <span class="slot-label">Output</span>
-                        </div>
-                        <div class="output-color-value" id="output-color-value"></div>
-                        <div class="output-pipe" id="output-pipe"></div>
-                    </div>
-                </div>
-                <div class="factory-controls">
-                    <button id="mix-btn" class="action-btn">⚙️ Mix Colors!</button>
-                    <button id="clear-btn" class="action-btn secondary">🗑️ Clear Factory</button>
-                </div>
+
+            <div class="grid-shell">
+                <svg id="connection-layer" class="connection-layer"></svg>
+                <div class="grid-board" id="grid-board"></div>
             </div>
-        </section>
-        
-        <!-- Crab Display -->
-        <section class="crab-area">
-            <h2>🦀 Feed the Crab!</h2>
-            <div class="crab-container">
-                <div class="food-pellet" id="food-pellet"></div>
-                <div class="crab" id="crab">
-                    <div class="crab-body">
-                        <div class="eye left-eye"></div>
-                        <div class="eye right-eye"></div>
-                        <div class="mouth" id="crab-mouth"></div>
-                    </div>
-                    <div class="claw left-claw"></div>
-                    <div class="claw right-claw"></div>
-                    <div class="legs">
-                        <div class="leg leg1"></div>
-                        <div class="leg leg2"></div>
-                        <div class="leg leg3"></div>
-                        <div class="leg leg4"></div>
-                        <div class="leg leg5"></div>
-                        <div class="leg leg6"></div>
-                    </div>
-                </div>
-            </div>
-            <button id="feed-btn" class="action-btn feed-btn" disabled>🍽️ Feed Crab!</button>
-            <p class="crab-status" id="crab-status">The crab is hungry! Mix some colors and feed it!</p>
         </section>
     </div>
     
